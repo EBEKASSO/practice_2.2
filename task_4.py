@@ -6,6 +6,7 @@ def get_profile():
     url = f"https://api.github.com/users/{username}"
     response = requests.get(url)
     data = response.json()
+
     if response.status_code == 200:
         print(f"\nИмя: {data.get('name', 'Не указано')}")
         print(f"Ссылка на профиль: {data.get('html_url', 'Не указано')}")
@@ -22,9 +23,11 @@ def get_repositories():
 
     repos_url = f"https://api.github.com/users/{username}/repos"
     repos_response = requests.get(repos_url)
+
     if repos_response.status_code == 200:
         data = repos_response.json()
         repos_list = []
+
         for i, repo in enumerate(data, 1):
             name = repo.get('name', 'Не указано')
             description = repo.get('description', 'Нет описания')
@@ -43,6 +46,7 @@ def get_repositories():
                 print("Описание: (нет описания)")
             print(f"Язык программирования: {language}")
             print(f"Ссылка: {repo_url}")
+
         while True:
             choice = input("Хотите найти репозиторий? (да/нет): ").lower()
 
@@ -60,6 +64,7 @@ def get_repositories():
                             print(f"Описание: {description}")
                         else:
                             print("Описание: (нет описания)")
+
                         print(f"Язык программирования: {language}")
                         print(f"Ссылка: {repo_url}")
                         found = True

@@ -26,6 +26,7 @@ def viewing_specific_currency(data):
 
 def create_group_currency():
     global list_groups
+
     create_group = input("Введите название группы с валютами: ").lower()
 
     if create_group in list_groups:
@@ -33,6 +34,7 @@ def create_group_currency():
     else:
         list_groups[create_group] = []
         print(f"Группа '{create_group}' создана")
+
     print("\nДоступные группы:")
     if list_groups:
         for group in list_groups.keys():
@@ -74,6 +76,7 @@ def create_group_currency():
                     break
             if not currency_found:
                 print("Ошибка: валюта с таким кодом не найдена!")
+
         if list_groups[choice_group]:
             print(f"\nГруппа '{choice_group}':")
             for currency in list_groups[choice_group]:
@@ -86,9 +89,11 @@ def create_group_currency():
 
 def viewing_list_groups():
     global list_groups
+
     if not list_groups:
         print("Нет созданных групп")
         return
+
     for group_name, currencies in list_groups.items():
         print(f"\n{group_name}:")
         if currencies:
@@ -99,6 +104,7 @@ def viewing_list_groups():
 
 def change_list_groups():
     global list_groups
+
     if not list_groups:
         print("Ошибка: нет созданных групп!")
         return
@@ -111,6 +117,7 @@ def change_list_groups():
     if choice_group not in list_groups:
         print("Ошибка: группа не найдена!")
         return
+
     print(f"\nГруппа '{choice_group}':")
     if list_groups[choice_group]:
         for currency in list_groups[choice_group]:
@@ -121,13 +128,14 @@ def change_list_groups():
     print("\nВыберите действие:")
     print("1. Добавить валюту")
     print("2. Удалить валюту")
-    print("0. Отмена")
+    print("3. Отмена")
 
     action = input("Ваш выбор: ")
 
     if action == "1":
         add_currency = input("Введите код валюты: ").upper()
         currency_found = False
+
         for code, info in data['Valute'].items():
             if code == add_currency:
                 exists = False
@@ -149,6 +157,7 @@ def change_list_groups():
                 break
         if not currency_found:
             print("Ошибка: валюта с таким кодом не найдена!")
+
     elif action == "2":
         if not list_groups[choice_group]:
             print("Ошибка: группа пуста, нечего удалять!")
@@ -163,20 +172,25 @@ def change_list_groups():
                 break
         if not found:
             print("Ошибка: валюта с таким кодом не найдена в группе!")
-    elif action == "0":
+
+    elif action == "3":
         print("Отмена")
+
     else:
         print("Ошибка: неверный выбор!")
 
 def save_list_groups():
     global list_groups
+
     if not list_groups:
         print("Ошибка: сохранять нечего!")
         return
     print("Группы сохранились в файл save.json\n")
+
     with open("resource/save.json", "w") as file:
         json.dump(list_groups, file)
     print("Содержимое файла save.json:")
+
     with open("resource/save.json", "r") as file:
         saved_data = json.load(file)
         for group_name, currencies in saved_data.items():
@@ -187,10 +201,31 @@ def save_list_groups():
             else:
                 print("(пусто)")
 
+
+def load_list_groups():
+    global list_groups
+
+    with open("resource/save.json", "r") as file:
+        list_groups = json.load(file)
+    print("Группы успешно загружены из файла save.json")
+
+    if list_groups:
+        print("\nЗагруженные группы:")
+        for group_name, currencies in list_groups.items():
+            print(f"{group_name}:")
+            if currencies:
+                for currency in currencies:
+                    print(f"{currency['code']}: {currency['name']} - {currency['value']} руб.")
+            else:
+                print("(группа пуста)")
+    else:
+        print("Файл пуст или не содержит групп")
+
 url = "https://www.cbr-xml-daily.ru/daily_json.js"
 response = requests.get(url, timeout = 5)
 response.encoding = 'utf-8'
 data = response.json()
+
 while True:
     print("\nВыберите действие:")
     print("1. Текущий курс всех валют")
@@ -199,7 +234,8 @@ while True:
     print("4. Просмотр групп с валютами")
     print("5. Изменение групп с валютами")
     print("6. Сохранение группы с валютами в файле save.json")
-    print("7. Выход")
+    print("7. Загрузить созданные группы из файла save.json")
+    print("8. Выход")
 
     user_choice = input("Выберите действие: ")
 
@@ -216,7 +252,9 @@ while True:
     elif user_choice == "6":
         save_list_groups()
     elif user_choice == "7":
+        load_list_groups()
+    elif user_choice == "8":
         print("Вы вышли")
         break
     else:
-        print("Ошибка: введите 1, 2, 3, 4, 5, 6 или 8!")
+        print("Ошибка: введите 1, 2, 3, 4, 5, 6, 7 или 8!")

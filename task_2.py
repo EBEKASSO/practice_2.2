@@ -1,5 +1,11 @@
 import psutil
+import time
 
-print(f"Загрузка CPU за 1 сек: {psutil.cpu_percent(interval=1)}%")
-print(f"Использование RAM: {psutil.virtual_memory().percent}%")
-print(f"Процент использования диска: {psutil.disk_usage('/').percent}%")
+while True:
+    cpu = psutil.cpu_percent(interval = 1)
+    ram = psutil.virtual_memory().percent
+    disk = psutil.disk_usage('/').percent
+
+    print(f"\rЗагрузка CPU за 1 сек.: {cpu}% - Использование RAM: {ram}% - Использование диска: {disk}%", end='')
+
+    time.sleep(1)
