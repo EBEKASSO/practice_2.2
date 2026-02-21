@@ -7,6 +7,7 @@ urls = [
     'https://jsonplaceholder.typicode.com/',
     'https://moodle.tomtit-tomsk.ru/'
 ]
+
 for i in urls:
     response = requests.get(i)
     code = response.status_code

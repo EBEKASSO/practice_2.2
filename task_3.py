@@ -125,7 +125,6 @@ def change_list_groups():
     else:
         print("(группа пуста)")
 
-    print("\nВыберите действие:")
     print("1. Добавить валюту")
     print("2. Удалить валюту")
     print("3. Отмена")
@@ -227,7 +226,6 @@ response.encoding = 'utf-8'
 data = response.json()
 
 while True:
-    print("\nВыберите действие:")
     print("1. Текущий курс всех валют")
     print("2. Просмотр отдельной валюты по её коду")
     print("3. Создание группы с валютами")
